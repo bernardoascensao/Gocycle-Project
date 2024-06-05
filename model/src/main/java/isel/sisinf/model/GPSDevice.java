@@ -18,19 +18,18 @@ public class GPSDevice {
     @OneToOne(mappedBy = "gpsDevice")
     private Bike bike;
 
-    // Construtor completo
+    //construtor
     public GPSDevice(double latitude, double longitude, int batteryPercentage) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.batteryPercentage = batteryPercentage;
     }
 
-    // Construtor sem argumentos (necessário para o JPA)
+    //construtor sem argumentos (necessário para o JPA)
     public GPSDevice() {
     }
 
-    // Getters e Setters
-
+    //getters e setters
     public String getSerialNumber() {
         return serialNumber;
     }

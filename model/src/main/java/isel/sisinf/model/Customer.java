@@ -25,11 +25,11 @@ public class Customer {
         this.nationality = nationality;
     }
 
-    // Construtor sem argumentos (necessário para o JPA)
+    //construtor sem argumentos (necessário para o JPA)
     public Customer() {
     }
 
-    // Getters and Setters
+    //getters and setters
     public String getId() {
         return idNumber;
     }

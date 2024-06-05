@@ -10,20 +10,18 @@ public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String code; // Código único da loja
-    private String manager; // Gestor da loja
-    private String address; // Morada da loja
-    private String locality; // Localidade
-    private String phoneNumber; // Número de telefone
-    private String email; // Endereço eletrônico
-    private boolean isActive; // Indica se a loja está ativa
+    private String manager;
+    private String address;
+    private String locality;
+    private String phoneNumber;
+    private String email;
+    private boolean isActive; //indica se a loja está ativa
 
     public Store() {
         this.isActive = true;
     }
 
-    public Store(String code, String manager, String address, String locality, String phoneNumber, String email) {
-        this.code = code;
+    public Store(String manager, String address, String locality, String phoneNumber, String email) {
         this.manager = manager;
         this.address = address;
         this.locality = locality;
@@ -40,5 +38,5 @@ public class Store {
         isActive = active;
     }
 
-    // Getters e setters
+    //getters e setters
 }

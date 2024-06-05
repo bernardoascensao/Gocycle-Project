@@ -23,9 +23,14 @@ SOFTWARE.
 */
 package isel.sisinf.ui;
 
+import isel.sisinf.jpa.BikeRepository;
 import isel.sisinf.jpa.CustomerRepository;
+import isel.sisinf.jpa.ReservationRepository;
+import isel.sisinf.model.Bike;
 import isel.sisinf.model.Customer;
+import isel.sisinf.model.Reservation;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.HashMap;
 
@@ -52,6 +57,8 @@ class UI
   
     private HashMap<Option,DbWorker> __dbMethods;
     private CustomerRepository customerRepository;
+    private BikeRepository bikeRepository;
+    private ReservationRepository reservationRepository;
 
     private UI()
     {
@@ -66,6 +73,8 @@ class UI
         __dbMethods.put(Option.about, new DbWorker() {public void doWork() {UI.this.about();}});
 
         customerRepository = new CustomerRepository();
+        bikeRepository = new BikeRepository();
+        reservationRepository = new ReservationRepository();
 
     }
 
@@ -179,7 +188,7 @@ class UI
         // Adicionar o código para inserir esses dados no sistema
         // Por exemplo, chamando um método no Dal para salvar os dados do cliente no banco de dados
 
-        System.out.println("createCostumer()");
+        System.out.println();
     }
   
     private void listExistingBikes()
@@ -189,8 +198,15 @@ class UI
 
         System.out.println("Lista de Bicicletas:");
         // Iterar e imprimir a lista de bicicletas
+        List<Bike> bikesList = bikeRepository.getAllBikes();
+        for (Bike bike : bikesList) {
+            System.out.println("ID: " + bike.getId());
+            System.out.println("Marca: " + bike.getBrand());
+            System.out.println("Modelo: " + bike.getModel());
+            System.out.println();
+        }
 
-        System.out.println("listExistingBikes()");
+        System.out.println();
     }
 
     private void checkBikeAvailability()
@@ -203,10 +219,18 @@ class UI
         System.out.print("Data e Hora (dd/mm/aa hh:mm:ss): ");
         String dateTime = scanner.nextLine();
 
+        boolean isAvailable = bikeRepository.checkBikeAvailability(bikeId, dateTime);
+
+        if(isAvailable){
+            System.out.println("Bicicleta disponível");
+        } else {
+            System.out.println("Bicicleta indisponível");
+        }
+
         // Adicionar o código para verificar a disponibilidade da bicicleta
         // Por exemplo, chamando um método no Dal para verificar se a bicicleta está disponível no banco de dados
 
-        System.out.println("checkBikeAvailability()");
+        System.out.println();
     }
 
     private void obtainBookings() {
@@ -215,19 +239,48 @@ class UI
 
         System.out.println("Lista de Reservas:");
         // Iterar e imprimir a lista de reservas
+        List<Reservation> reservations = reservationRepository.getAllReservations();
 
-        System.out.println("obtainBookings()");
+        for(Reservation reservation : reservations){
+            System.out.println("ID: " + reservation.getId());
+            System.out.println("ID da Loja: " + reservation.getStoreId());
+            System.out.println("ID da Bicicleta: " + reservation.getBikeId());
+            System.out.println("Número do Cliente: " + reservation.getCustomerId());
+            System.out.println("Data e Hora de Início: " + reservation.getStartDate());
+            System.out.println("Data e Hora de Fim: " + reservation.getEndDate());
+            System.out.println("Valor: " + reservation.getAmount());
+            System.out.println();
+        }
+
+        System.out.println();
     }
 
     private void makeBooking()
     {
-        // Adicionar o código para recuperar a lista de reservas do sistema
-        // Por exemplo, chamando um método no Dal para obter os dados das reservas do banco de dados
+        Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Lista de Reservas:");
-        // Iterar e imprimir a lista de reservas
+        System.out.print("ID da Loja: ");
+        String storeId = scanner.nextLine();
 
-        System.out.println("makeBooking()");
+        System.out.print("ID da Bicicleta: ");
+        String bikeId = scanner.nextLine();
+
+        System.out.print("Número do Cliente: ");
+        String customerId = scanner.nextLine();
+
+        System.out.print("Data e Hora de Início (dd/mm/aa hh:mm:ss): ");
+        String startDate = scanner.nextLine();
+
+        System.out.print("Data e Hora de Fim (dd/mm/aa hh:mm:ss): ");
+        String endDate = scanner.nextLine();
+
+        System.out.print("Valor: ");
+        String amount = scanner.nextLine();
+
+        Reservation reservation = new Reservation(Integer.parseInt(storeId), Integer.parseInt(bikeId), Integer.parseInt(customerId), startDate, endDate, Double.parseDouble(amount));
+        reservationRepository.saveReservationWithStoredProc(Integer.parseInt(storeId), Integer.parseInt(bikeId), Integer.parseInt(customerId), startDate, endDate, Double.parseDouble(amount));
+
+        System.out.println();
     }
 
     private void cancelBooking()
@@ -237,18 +290,19 @@ class UI
         System.out.print("Número da Reserva: ");
         String bookingNumber = scanner.nextLine();
 
+        reservationRepository.deleteReservationWithOptimisticLocking(Integer.parseInt(bookingNumber));
+
         // Adicionar o código para cancelar a reserva no sistema
         // Por exemplo, chamando um método no Dal para remover a reserva no banco de dados
 
-        System.out.println("cancelBooking");
+        System.out.println();
     }
     private void about()
     {
-        // TODO: Add your Group ID & member names
         System.out.println("DAL version:"+ isel.sisinf.jpa.Dal.version());
         System.out.println("Core version:"+ isel.sisinf.model.Core.version());
         System.out.println("Grupo: Bernardo Ascensão, Maria Pedro, Constança Castro");
-        
+        System.out.println();
     }
 }
 
