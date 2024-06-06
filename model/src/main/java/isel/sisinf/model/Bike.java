@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "Bike")
 public class Bike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +16,7 @@ public class Bike {
     private String model;
     private String brand;
     private int numberOfGears; //número de velocidades {1, 6, 18, 24}
-    private String state; //estado: livre, ocupado, em reserva, em manutenção
+    private String state; //estado: livre, ocupado, em manutenção
     private int autonomy; //autonomia em km (apenas para bicicletas elétricas)
     private int maxSpeed; //velocidade máxima em km/h (apenas para bicicletas elétricas)
     @OneToOne

@@ -8,33 +8,40 @@ import jakarta.persistence.Id;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String idNumber;
+    private int idNumber;
     private String name;
     private String address;
     private String email;
     private String phone;
     private String ccNumber;
     private String nationality;
+    private Character atrdisc;
+    private boolean isActive; // Campo para remoção lógica
 
-    public Customer(String name, String address, String email, String phone, String ccNumber, String nationality) {
+    public Customer(String name, String address, String email, String phone, String ccNumber, String nationality, Character atrdisc) {
         this.name = name;
         this.address = address;
         this.email = email;
         this.phone = phone;
         this.ccNumber = ccNumber;
         this.nationality = nationality;
+        if (atrdisc != 'C' && atrdisc != 'G') {
+            throw new IllegalArgumentException("atrdisc must be 'C' or 'G'");
+        }
+        this.atrdisc = atrdisc;
+        this.isActive = true; // Cliente inicialmente ativo
     }
 
     //construtor sem argumentos (necessário para o JPA)
     public Customer() {
+        this.isActive = true; // Cliente inicialmente ativo
     }
-
     //getters and setters
-    public String getId() {
+    public int getId() {
         return idNumber;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.idNumber = id;
     }
 
@@ -60,5 +67,9 @@ public class Customer {
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 }

@@ -181,7 +181,10 @@ class UI
         System.out.print("Nacionalidade: ");
         String nationality = scanner.nextLine();
 
-        Customer customer = new Customer(name, address, email, phone, ccNumber, nationality);
+        System.out.print("Cliente ou Gestor? (C/G) ");
+        String atrdisc = scanner.nextLine();
+
+        Customer customer = new Customer(name, address, email, phone, ccNumber, nationality, atrdisc.charAt(0));
         customerRepository.saveCustomer(customer);
         System.out.println("Customer created successfully.");
 

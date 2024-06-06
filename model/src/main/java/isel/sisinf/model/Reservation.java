@@ -6,10 +6,13 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
+@IdClass(ReservationId.class)
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Id
     private int storeId;
     private int bikeId;
     private int customerId;
