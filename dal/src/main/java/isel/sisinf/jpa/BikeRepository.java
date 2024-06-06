@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BikeRepository {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("my-pu");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("dal-lab");
 
     public void saveBike(Bike bike) {
         EntityManager em = emf.createEntityManager();

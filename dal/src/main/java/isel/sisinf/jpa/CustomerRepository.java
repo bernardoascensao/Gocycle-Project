@@ -7,7 +7,7 @@ import jakarta.persistence.Persistence;
 
 public class CustomerRepository {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("my-pu");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("dal-lab");
 
     public void saveCustomer(Customer customer) {
         EntityManager em = emf.createEntityManager();

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class StoreRepository {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("my-pu");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("dal-lab");
 
     public void saveStore(Store store) {
         EntityManager em = emf.createEntityManager();

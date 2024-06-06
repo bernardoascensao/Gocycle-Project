@@ -16,7 +16,7 @@ public class Customer {
     private String ccNumber;
     private String nationality;
     private Character atrdisc;
-    private boolean isActive; // Campo para remoção lógica
+    private Boolean isActive; // Campo para remoção lógica
 
     public Customer(String name, String address, String email, String phone, String ccNumber, String nationality, Character atrdisc) {
         this.name = name;

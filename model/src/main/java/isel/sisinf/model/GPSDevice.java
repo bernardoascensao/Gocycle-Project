@@ -10,19 +10,18 @@ import jakarta.persistence.OneToOne;
 public class GPSDevice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String serialNumber;
+    private int serialNumber;
     private double latitude;
     private double longitude;
     private int batteryPercentage;
-
-    @OneToOne(mappedBy = "gpsDevice")
-    private Bike bike;
+    private int bikeId;
 
     //construtor
-    public GPSDevice(double latitude, double longitude, int batteryPercentage) {
+    public GPSDevice(double latitude, double longitude, int batteryPercentage, int bikeId) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.batteryPercentage = batteryPercentage;
+        this.bikeId = bikeId;
     }
 
     //construtor sem argumentos (necessário para o JPA)
@@ -30,7 +29,7 @@ public class GPSDevice {
     }
 
     //getters e setters
-    public String getSerialNumber() {
+    public int getSerialNumber() {
         return serialNumber;
     }
 
@@ -58,11 +57,4 @@ public class GPSDevice {
         this.batteryPercentage = batteryPercentage;
     }
 
-    public Bike getBike() {
-        return bike;
-    }
-
-    public void setBike(Bike bike) {
-        this.bike = bike;
-    }
 }

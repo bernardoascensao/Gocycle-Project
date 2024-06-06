@@ -16,7 +16,7 @@ public class ReservationRepository {
     private static final String USER = "myuser";
     private static final String PASS = "mypassword";
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("my-pu");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("dal-lab");
 
     // Salva uma reserva
     public void saveReservation(Reservation reservation) {

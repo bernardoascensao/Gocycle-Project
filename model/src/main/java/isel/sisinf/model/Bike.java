@@ -1,17 +1,15 @@
 package isel.sisinf.model;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "Bike")
 public class Bike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String type; //tipo de bicicleta: clássica ou elétrica
+    private Character type; //tipo de bicicleta: clássica ou elétrica
     private int weight;
     private String model;
     private String brand;
@@ -19,13 +17,15 @@ public class Bike {
     private String state; //estado: livre, ocupado, em manutenção
     private int autonomy; //autonomia em km (apenas para bicicletas elétricas)
     private int maxSpeed; //velocidade máxima em km/h (apenas para bicicletas elétricas)
-    @OneToOne
-    private GPSDevice gpsDevice; //associação com dispositivo GPS
+    private int GPSSerialNumber; //associação com dispositivo GPS
     private boolean isActive;
 
     // construtor
-    public Bike(String type, int weight, String model, String brand, int numberOfGears,
-                String state, int autonomy, int maxSpeed, GPSDevice gpsDevice) {
+    public Bike(Character type, int weight, String model, String brand, int numberOfGears,
+                String state, int autonomy, int maxSpeed, int gpsDevice) {
+        if (type != 'E' && type != 'C') {
+            throw new IllegalArgumentException("type must be 'C' or 'E'");
+        }
         this.type = type;
         this.weight = weight;
         this.model = model;
@@ -34,7 +34,7 @@ public class Bike {
         this.state = state;
         this.autonomy = autonomy;
         this.maxSpeed = maxSpeed;
-        this.gpsDevice = gpsDevice;
+        this.GPSSerialNumber = gpsDevice;
         this.isActive = true;       // inicialmente ativa
     }
 
