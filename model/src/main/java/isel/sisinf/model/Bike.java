@@ -58,7 +58,7 @@ public class Bike {
 
     public boolean isAvailable(EntityManager em, Date date) {
         List<Reservation> reservations = em.createQuery(
-                        "SELECT r FROM Reservation r WHERE r.bikeId = :bikeId AND r.startDate <= :date AND r.endDate >= :date", Reservation.class)
+                        "SELECT r FROM Reservation r WHERE r.bikeId = :bikeId AND r.startDate <= :date AND r.endDate >= :date AND r.isActive = true", Reservation.class)
                 .setParameter("bikeId", this.id)
                 .setParameter("date", date)
                 .getResultList();

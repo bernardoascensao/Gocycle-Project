@@ -1,10 +1,10 @@
 CREATE OR REPLACE FUNCTION realizar_reserva(
-    store_id INT,
-    bike_id INT,
-    customer_id VARCHAR,
+    store_id INTEGER,
+    bike_id INTEGER,
+    customer_id INTEGER,
     start_date TIMESTAMP,
     end_date TIMESTAMP,
-    amount NUMERIC
+    amount DOUBLE PRECISION
 ) RETURNS VOID AS $$
 BEGIN
 INSERT INTO Reservation (storeId, bikeId, customerId, startDate, endDate, amount, isActive)

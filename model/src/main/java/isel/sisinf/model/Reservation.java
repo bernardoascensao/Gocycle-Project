@@ -1,5 +1,6 @@
 package isel.sisinf.model;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import jakarta.persistence.*;
@@ -16,12 +17,15 @@ public class Reservation {
     private int storeId;
     private int bikeId;
     private int customerId;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date startDate;         //data de início da reserva
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date endDate;           //data de fim da reserva
+//    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp startDate;         //data de início da reserva
+//    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp endDate;           //data de fim da reserva
     private double amount;
     private boolean isActive;       //?? perguntar se é boa ideia ter este campo
+
+    @Version
+    private int version; // Campo de versão para controle de concorrência
 
     //construtor sem argumentos (necessário para o JPA)
     public Reservation() {}
@@ -31,8 +35,12 @@ public class Reservation {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
         try {
-            Date startDate = dateFormat.parse(startDateStr);
-            Date endDate = dateFormat.parse(endDateStr);
+            Date parsedStartDate  = dateFormat.parse(startDateStr);
+            Date parsedEndDate  = dateFormat.parse(endDateStr);
+
+            // Converte java.util.Date para java.sql.Timestamp
+            Timestamp startDate = new Timestamp(parsedStartDate.getTime());
+            Timestamp endDate = new Timestamp(parsedEndDate.getTime());
 
             this.storeId = storeId;
             this.bikeId = bikeId;

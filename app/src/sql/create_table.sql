@@ -69,10 +69,12 @@ create table Customer(
 create table Store(
                      id SERIAL primary key,
                      email varchar(40) check (position('@' in email) > 0) unique,
-                     endereco varchar(100),
-                     localidade varchar(30),
-                     manager integer,
-                     foreign key(manager) references Customer(idNumber)
+                     address varchar(100),
+                     locality varchar(30),
+                     phoneNumber varchar(30) unique,
+                     managerId integer,
+                     isActive BOOLEAN DEFAULT TRUE,
+                     foreign key(managerId) references Customer(idNumber)
 );
 
 create table Reservation(
@@ -85,6 +87,7 @@ create table Reservation(
                         amount numeric(5,2),
                         bikeId integer,
                         isActive boolean default true,
+                        version INT DEFAULT 0,
                         foreign key(bikeId) references Bike(id),
                         foreign key(storeId) references Store(id),
                         foreign key(customerId) references Customer(idNumber)

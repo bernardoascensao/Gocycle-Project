@@ -29,6 +29,7 @@ import isel.sisinf.jpa.ReservationRepository;
 import isel.sisinf.model.Bike;
 import isel.sisinf.model.Customer;
 import isel.sisinf.model.Reservation;
+import isel.sisinf.model.ReservationId;
 
 import java.util.List;
 import java.util.Scanner;
@@ -280,25 +281,30 @@ class UI
         System.out.print("Valor: ");
         String amount = scanner.nextLine();
 
-        Reservation reservation = new Reservation(Integer.parseInt(storeId), Integer.parseInt(bikeId), Integer.parseInt(customerId), startDate, endDate, Double.parseDouble(amount));
+        //Reservation reservation = new Reservation(Integer.parseInt(storeId), Integer.parseInt(bikeId), Integer.parseInt(customerId), startDate, endDate, Double.parseDouble(amount));
         reservationRepository.saveReservationWithStoredProc(Integer.parseInt(storeId), Integer.parseInt(bikeId), Integer.parseInt(customerId), startDate, endDate, Double.parseDouble(amount));
 
-        System.out.println();
+        System.out.println("Reservation created successfully.");
     }
 
     private void cancelBooking()
     {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Número da Reserva: ");
-        String bookingNumber = scanner.nextLine();
+        System.out.print("ID da loja: ");
+        String storeId = scanner.nextLine();
 
-        reservationRepository.deleteReservationWithOptimisticLocking(Integer.parseInt(bookingNumber));
+        System.out.print("ID da reserva: ");
+        String reservationNumber = scanner.nextLine();
+
+        ReservationId reservationId = new ReservationId(Integer.parseInt(reservationNumber), Integer.parseInt(storeId));
+
+        reservationRepository.deleteReservationWithOptimisticLocking(reservationId);
 
         // Adicionar o código para cancelar a reserva no sistema
         // Por exemplo, chamando um método no Dal para remover a reserva no banco de dados
 
-        System.out.println();
+        System.out.println("Reservatrion deleted successfully.");
     }
     private void about()
     {

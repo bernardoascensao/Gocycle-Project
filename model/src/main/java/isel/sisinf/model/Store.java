@@ -10,7 +10,7 @@ public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String manager;
+    private int manager;
     private String address;
     private String locality;
     private String phoneNumber;
@@ -21,7 +21,7 @@ public class Store {
         this.isActive = true;
     }
 
-    public Store(String manager, String address, String locality, String phoneNumber, String email) {
+    public Store(int manager, String address, String locality, String phoneNumber, String email) {
         this.manager = manager;
         this.address = address;
         this.locality = locality;
