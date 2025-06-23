@@ -7,22 +7,41 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@IdClass(ReservationId.class)
+@Table(name = "RESERVATION")
+@NamedQueries({
+    @NamedQuery(
+            name = "Reservation.findByKey",
+            query = "SELECT r FROM Reservation r WHERE r.id = :key"
+    ),
+    @NamedQuery(
+            name = "Reservation.findAll",
+            query = "SELECT r FROM Reservation r"
+    )
+})
 public class Reservation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @EmbeddedId
+    private ReservationId id;
 
-    @Id
-    private int storeId;
-    private int bikeId;
-    private int customerId;
-//    @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp startDate;         //data de início da reserva
-//    @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp endDate;           //data de fim da reserva
+    @MapsId("storeId")
+    @ManyToOne
+    @JoinColumn(name = "store", referencedColumnName = "id")
+    private Store store;
+
+    @ManyToOne
+    @JoinColumn(name = "bike", nullable = false, referencedColumnName = "id")
+    private Bike bike;
+
+    @ManyToOne
+    @JoinColumn(name = "customer", nullable = false, referencedColumnName = "id")
+    private Customer customer;
+
+    @Column(nullable = false)
+    private Timestamp startDate;
+    @Column(nullable = false)
+    private Timestamp endDate;
+
+    @Column(nullable = false, precision = 5, scale = 2)
     private double amount;
-    private boolean isActive;       //?? perguntar se é boa ideia ter este campo
 
     @Version
     private int version; // Campo de versão para controle de concorrência
@@ -31,7 +50,7 @@ public class Reservation {
     public Reservation() {}
 
     //construtor
-    public Reservation(int storeId, int bikeId, int customerId, String startDateStr, String endDateStr, double amount) {
+    public Reservation(Store store, Bike bike, Customer customer, String startDateStr, String endDateStr, double amount) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
         try {
@@ -42,13 +61,12 @@ public class Reservation {
             Timestamp startDate = new Timestamp(parsedStartDate.getTime());
             Timestamp endDate = new Timestamp(parsedEndDate.getTime());
 
-            this.storeId = storeId;
-            this.bikeId = bikeId;
-            this.customerId = customerId;
+            this.store = store;
+            this.bike = bike;
+            this.customer = customer;
             this.startDate = startDate;
             this.endDate = endDate;
             this.amount = amount;
-            this.isActive = true;
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -56,42 +74,32 @@ public class Reservation {
         }
     }
 
-    //getters e setters
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public int getId() {
+    // getters & setters
+    public ReservationId getId() {
         return id;
     }
 
-    public int getStoreId() {
-        return storeId;
+    public Store getStore() {
+        return store;
     }
 
-    public int getBikeId() {
-        return bikeId;
+    public Bike getBike() {
+        return bike;
     }
 
-    public int getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public String getStartDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        return dateFormat.format(startDate);
+    public Timestamp getStartDate() {
+        return startDate;
     }
 
-    public String getEndDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        return dateFormat.format(endDate);
+    public Timestamp getEndDate() {
+        return endDate;
     }
 
-    public String getAmount() {
-        return String.format("%.2f", amount);
+    public Double getAmount() {
+        return amount;
     }
 }

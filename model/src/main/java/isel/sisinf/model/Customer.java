@@ -1,21 +1,40 @@
 package isel.sisinf.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 @Entity
+@NamedQuery(
+        name = "Customer.findByKey",
+        query = "SELECT c FROM Customer c WHERE c.id = :key"
+)
+@Table(name = "CUSTOMER")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idNumber;
+    private int id;
+
+    @Column(length = 40, nullable = false)
     private String name;
+
+    @Column(length = 150, nullable = false)
     private String address;
+
+    @Column(length = 40, nullable = false, unique = true)
     private String email;
+
+    @Column(length = 30, unique = true)
     private String phone;
+
+    @Column(length = 12, unique = true, nullable = false)
     private String ccNumber;
+
+    @Column(length = 20, nullable = false)
     private String nationality;
-    private Character atrdisc;
+
+    @Column(length = 1, nullable = false)
+    private char atrdisc;
+
+    @Column(nullable = false)
     private Boolean isActive; // Campo para remoção lógica
 
     public Customer(String name, String address, String email, String phone, String ccNumber, String nationality, Character atrdisc) {
@@ -38,11 +57,11 @@ public class Customer {
     }
     //getters and setters
     public int getId() {
-        return idNumber;
+        return id;
     }
 
     public void setId(int id) {
-        this.idNumber = id;
+        this.id = id;
     }
 
     public void setName(String name) {

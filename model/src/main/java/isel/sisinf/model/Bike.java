@@ -1,28 +1,53 @@
 package isel.sisinf.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
-import java.util.List;
+import java.sql.Timestamp;
 
 @Entity
+@Table(name = "BIKE")
+@NamedQueries({
+    @NamedQuery(name = "Bike.findByKey", query = "SELECT b FROM Bike b WHERE b.id = :key"),
+    @NamedQuery(name = "Bike.findAll", query = "SELECT b FROM Bike b"),
+})
 public class Bike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private Character type; //tipo de bicicleta: clássica ou elétrica
+
+    @Column(nullable = false, length = 1)
+    private char type; //tipo de bicicleta: clássica ou elétrica
+
+    @Column(nullable = false, precision = 4, scale = 2)
     private int weight;
+
+    @Column(nullable = false, length = 20)
     private String model;
+
+    @Column(nullable = false, length = 30)
     private String brand;
+
+    @Column
     private int numberOfGears; //número de velocidades {1, 6, 18, 24}
-    private String state; //estado: livre, ocupado, em manutenção
-    private int autonomy; //autonomia em km (apenas para bicicletas elétricas)
-    private int maxSpeed; //velocidade máxima em km/h (apenas para bicicletas elétricas)
-    private int GPSSerialNumber; //associação com dispositivo GPS
+
+    @Column(nullable = false, length = 20)
+    private String state; //state: free, busy, maintenance
+
+    @Column(nullable = false)
+    private int autonomy;
+
+    @Column(nullable = false)
+    private int maxSpeed;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "GPSSerialNumber", referencedColumnName = "serialNumber")
+    private GPSDevice GPSSerialNumber;
+
+    @Column(nullable = false)
     private boolean isActive;
 
     // construtor
     public Bike(Character type, int weight, String model, String brand, int numberOfGears,
-                String state, int autonomy, int maxSpeed, int gpsDevice) {
+                String state, int autonomy, int maxSpeed, GPSDevice gpsDevice) {
         if (type != 'E' && type != 'C') {
             throw new IllegalArgumentException("type must be 'C' or 'E'");
         }
@@ -35,12 +60,12 @@ public class Bike {
         this.autonomy = autonomy;
         this.maxSpeed = maxSpeed;
         this.GPSSerialNumber = gpsDevice;
-        this.isActive = true;       // inicialmente ativa
+        this.isActive = true;
     }
 
     // construtor sem argumentos (no-arg constructor) necessário para uso pelo mecanismo de persistência
     public Bike() {
-        this.isActive = true; // Inicialmente ativa
+        this.isActive = true;
     }
 
     //getters e setters
@@ -56,15 +81,6 @@ public class Bike {
         return brand;
     }
 
-    public boolean isAvailable(EntityManager em, Date date) {
-        List<Reservation> reservations = em.createQuery(
-                        "SELECT r FROM Reservation r WHERE r.bikeId = :bikeId AND r.startDate <= :date AND r.endDate >= :date AND r.isActive = true", Reservation.class)
-                .setParameter("bikeId", this.id)
-                .setParameter("date", date)
-                .getResultList();
-        return reservations.isEmpty();
-    }
-
     public String getModel() {
         return model;
     }
@@ -72,4 +88,6 @@ public class Bike {
     public void setActive(boolean active) {
         isActive = active;
     }
+
+    public Character getType() { return type; }
 }

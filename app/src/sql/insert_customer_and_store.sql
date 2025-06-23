@@ -5,6 +5,6 @@ VALUES
     ('Bob Johnson', 'rua c', 'bob.johnson@example.com', '456', '234567890123', 'Canada', 'G');
 
 -- Inserção de dados na tabela Store
-INSERT INTO Store (email, address, locality, phoneNumber, managerId)
+INSERT INTO Store (email, address, locality, phoneNumber, manager)
 VALUES
     ('store1@example.com', 'rua store', 'City1', '123-456', 2);

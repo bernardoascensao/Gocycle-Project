@@ -1,27 +1,42 @@
 package isel.sisinf.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "STORE")
+@NamedQuery(
+        name = "Store.findByKey",
+        query = "SELECT s FROM Store s WHERE s.id = :key"
+)
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int manager;
-    private String address;
-    private String locality;
-    private String phoneNumber;
+    public int id;
+
+    @Column(length = 40, nullable = false, unique = true)
     private String email;
-    private boolean isActive; //indica se a loja está ativa
+
+    @Column(length = 100, nullable = false)
+    private String address;
+
+    @Column(length = 40, nullable = false)
+    private String locality;
+
+    @Column(length = 20, nullable = false)
+    private String phoneNumber;
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager", referencedColumnName = "id")
+    private Customer manager;
+
+    @Column(nullable = false)
+    private boolean isActive;
 
     public Store() {
         this.isActive = true;
     }
 
-    public Store(int manager, String address, String locality, String phoneNumber, String email) {
+    public Store(Customer manager, String address, String locality, String phoneNumber, String email) {
         this.manager = manager;
         this.address = address;
         this.locality = locality;
@@ -36,6 +51,10 @@ public class Store {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     //getters e setters

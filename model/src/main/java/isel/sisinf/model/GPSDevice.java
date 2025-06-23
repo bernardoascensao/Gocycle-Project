@@ -1,27 +1,27 @@
 package isel.sisinf.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class GPSDevice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int serialNumber;
+
+    @Column
     private double latitude;
+
+    @Column
     private double longitude;
+
+    @Column
     private int batteryPercentage;
-    private int bikeId;
 
     //construtor
     public GPSDevice(double latitude, double longitude, int batteryPercentage, int bikeId) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.batteryPercentage = batteryPercentage;
-        this.bikeId = bikeId;
     }
 
     //construtor sem argumentos (necessário para o JPA)

@@ -1,9 +1,15 @@
 package isel.sisinf.model;
 
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
 public class ReservationId implements Serializable {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int storeId;
 

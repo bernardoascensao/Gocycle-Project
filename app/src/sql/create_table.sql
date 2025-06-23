@@ -19,9 +19,7 @@ create table GPSDevice(
                           serialNumber serial primary key,
                           latitude numeric(6,4) check (latitude between -90 and 90),
                           longitude numeric(6,4)check (longitude between -180 and 180),
-                          batteryPercentage integer check (batteryPercentage between 0 and 100),
-                          bike SERIAL
---                           FOREIGN KEY (bike) REFERENCES Bike(id)
+                          batteryPercentage integer check (batteryPercentage between 0 and 100)
 );
 
 CREATE TABLE Bike (
@@ -34,35 +32,21 @@ CREATE TABLE Bike (
                       state VARCHAR(30) CHECK (state IN ('livre', 'ocupado', 'em manutenção')),
                       autonomy INTEGER CHECK (type = 'E' OR autonomy IS NULL),
                       maxSpeed INTEGER CHECK (type = 'E' OR maxSpeed IS NULL),
-                      isActive BOOLEAN DEFAULT TRUE,
                       GPSSerialNumber INTEGER,
+                      isActive boolean default true,
                       FOREIGN KEY (GPSSerialNumber) REFERENCES GPSDevice(serialNumber)
 );
 
-
--- create table CLASSICA(
---                          bicicleta integer,
---                          foreign key (bicicleta) references bicicleta(id),
---                          nomudanca integer check (nomudanca between 0 and 5)
--- );
---
--- create table ELETRICA(
---                          bicicleta integer,
---                          foreign key (bicicleta) references bicicleta(id),
---                          autonomia integer,
---                          velocidade integer
--- );
-
 create table Customer(
-                       idNumber SERIAL primary key,
+                       id SERIAL primary key,
                        name varchar(40),
                        address varchar(150),
                        email varchar(40) check (position('@' in email) > 0) unique,
                        phone varchar(30) unique,
                        ccNumber char(12) unique,
                        nationality varchar(20),
-                       isActive BOOLEAN DEFAULT TRUE,
-                       atrdisc char(2) check (atrdisc in ('C', 'G'))
+                       atrdisc char(2) check (atrdisc in ('C', 'G')),
+                       isActive BOOLEAN DEFAULT TRUE
 );
 
 
@@ -72,42 +56,24 @@ create table Store(
                      address varchar(100),
                      locality varchar(30),
                      phoneNumber varchar(30) unique,
-                     managerId integer,
+                     manager integer,
                      isActive BOOLEAN DEFAULT TRUE,
-                     foreign key(managerId) references Customer(idNumber)
+                     foreign key(manager) references Customer(id)
 );
 
 create table Reservation(
                         id SERIAL,
-                        storeId integer,
-                        primary key (id, storeId),
-                        customerId integer,
+                        store integer,
+                        primary key (id, store),
+                        customer integer,
                         startDate timestamp,
                         endDate timestamp,
                         amount numeric(5,2),
-                        bikeId integer,
-                        isActive boolean default true,
-                        version INT DEFAULT 0,
-                        foreign key(bikeId) references Bike(id),
-                        foreign key(storeId) references Store(id),
-                        foreign key(customerId) references Customer(idNumber)
+                        bike integer,
+                        version integer not null default 0,
+                        foreign key(bike) references Bike(id),
+                        foreign key(store) references Store(id),
+                        foreign key(customer) references Customer(id)
 );
-
--- create table TELEFONELOJA(
---                              loja integer,
---                              foreign key (loja) references loja(codigo),
---                              numero varchar(10),
---                              primary key (numero)
--- );
---
--- create table CLIENTERESERVA(
---                                cliente integer,
---                                foreign key (cliente) references pessoa(id),
---                                reserva integer,
---                                loja integer,
---                                foreign key (reserva, loja) references reserva(noreserva, loja)
---
---
--- );
 
 commit;
